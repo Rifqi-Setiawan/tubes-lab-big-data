@@ -1,0 +1,11 @@
+# Virtual Environment
+venv/
+
+# Python cache
+__pycache__/
+
+# Streamlit Secrets (PENTING!)
+.streamlit/secrets.toml
+
+# MacOS meta files (jika pakai mac)
+.DS_Store
