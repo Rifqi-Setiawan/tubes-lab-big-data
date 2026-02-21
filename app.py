@@ -106,10 +106,10 @@ st.markdown("""
         font-weight: bold;
     }
     
-    /* Improve text readability */
+    /* Improve text readability - biarkan Streamlit mengatur warna secara default */
     .stMarkdown {
         line-height: 1.7;
-        color: #333;
+        /* Removed color: #333; to allow Streamlit's default theme-aware colors */
     }
     
     /* Remove weird symbols and clean up */
@@ -288,14 +288,30 @@ def clean_and_format_response(text):
     if text is None:
         return ""
     
-    # Jika input adalah list, gabungkan menjadi string
+    # Jika input adalah list, ekstrak teks dari dalamnya dengan benar
     if isinstance(text, list):
-        # Jika list berisi string, gabungkan dengan newline
-        if all(isinstance(item, str) for item in text):
-            text = '\n'.join(str(item) for item in text)
-        else:
-            # Jika list berisi objek lain, convert ke string
-            text = '\n'.join(str(item) for item in text)
+        extracted_texts = []
+        for item in text:
+            if isinstance(item, str):
+                extracted_texts.append(item)
+            elif isinstance(item, dict):
+                # Ekstrak dari dict dengan berbagai kemungkinan key
+                if 'text' in item:
+                    extracted_texts.append(str(item['text']))
+                elif 'content' in item:
+                    extracted_texts.append(str(item['content']))
+                elif 'message' in item:
+                    extracted_texts.append(str(item['message']))
+                else:
+                    # Jika tidak ada key yang dikenal, coba ambil value pertama yang string
+                    values = [v for v in item.values() if isinstance(v, str)]
+                    if values:
+                        extracted_texts.append(values[0])
+                    else:
+                        extracted_texts.append(str(item))
+            else:
+                extracted_texts.append(str(item))
+        text = '\n'.join(extracted_texts)  # Gabungkan teks yang sudah diekstrak
     
     # Convert ke string jika belum string
     if not isinstance(text, str):
@@ -303,6 +319,9 @@ def clean_and_format_response(text):
     
     if not text:
         return ""
+    
+    # Convert literal \n menjadi newline yang sesungguhnya
+    text = text.replace('\\n', '\n')
     
     # Hapus karakter kontrol yang tidak perlu
     text = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', text)
