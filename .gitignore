@@ -1,12 +1,12 @@
-# Virtual Environment
+# ============================================================================
+# Python & Virtual Environment
+# ============================================================================
 venv/
 env/
+ENV/
+.venv
 .env
-
-# ChromaDB Vector Database Storage (Jangan di-push ke git karena ukurannya besar/binary)
-chroma_db_infotentor/
-
-# Python Cache & Byte-compiled files
+*.pyc
 __pycache__/
 *.py[cod]
 *$py.class
@@ -27,21 +27,69 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# OS specific files (Mac/Windows)
+# ============================================================================
+# ChromaDB Vector Database Storage
+# ============================================================================
+# Jangan commit database karena ukurannya besar dan binary
+chroma_db_infotentor/
+*.sqlite3
+*.db
+
+# ============================================================================
+# Streamlit Secrets & Configuration
+# ============================================================================
+# PENTING: Jangan pernah commit file secrets.toml yang berisi API keys!
+.streamlit/secrets.toml
+
+# ============================================================================
+# OS Specific Files
+# ============================================================================
+# macOS
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
+
+# Windows
 ehthumbs.db
 Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
+# Linux
+*~
+
+# ============================================================================
 # IDEs and Editors
+# ============================================================================
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
 
-# Streamlit Secrets (PENTING!)
-.streamlit/secrets.toml
+# ============================================================================
+# Jupyter Notebook
+# ============================================================================
+.ipynb_checkpoints
+*.ipynb
+
+# ============================================================================
+# Logs
+# ============================================================================
+*.log
+logs/
+
+# ============================================================================
+# Temporary Files
+# ============================================================================
+*.tmp
+*.temp
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
