@@ -314,9 +314,21 @@ def linear_search(arr, target):
                     if "messages" in result_dict:
                         # Ambil message terakhir (AI response)
                         last_message = result_dict["messages"][-1]
-                        output = last_message.content if hasattr(last_message, 'content') else str(last_message)
+                        
+                        # Handle list of contents (seperti text blocks dan tool calls)
+                        if isinstance(last_message.content, list):
+                            text_parts = []
+                            for part in last_message.content:
+                                if isinstance(part, str):
+                                    text_parts.append(part)
+                                elif isinstance(part, dict) and "text" in part:
+                                    text_parts.append(part["text"])
+                            output = "\n".join(text_parts)
+                        else:
+                            # Jika hanya string atau object lain yang punya atribut content
+                            output = str(last_message.content) if hasattr(last_message, 'content') else str(last_message)
                     else:
-                        output = result_dict.get("output", str(result_dict))
+                        output = str(result_dict.get("output", str(result_dict)))
                 else:
                     output = str(result_dict)
                 
